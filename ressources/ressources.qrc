@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="icons">
+    <file>icons/Logo_stFrz.png</file>
     <file>icons/start.png</file>
     <file>icons/folder.png</file>
   </qresource>
