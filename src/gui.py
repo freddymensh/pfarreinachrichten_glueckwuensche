@@ -3,10 +3,11 @@ import configparser
 import logging
 
 from PyQt5 import QtWidgets, uic, QtCore
-from PyQt5.QtCore import QFile
+from PyQt5.QtCore import QFile, QObject
 
+import ressources.ressources
 
-CONFIG_FILE = "./setup.ini"
+CONFIG_FILE = "./config.ini"
 
 
 def threaded(fn):
@@ -18,7 +19,7 @@ def threaded(fn):
 class GUI(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(GUI, self).__init__(parent)
-        uiFile = QFile('src/gui.ui')
+        uiFile = QFile(':/gui/gui.ui')
         uiFile.open(QFile.ReadOnly)
         uic.loadUi(uiFile, self)
 
@@ -30,8 +31,59 @@ class GUI(QtWidgets.QMainWindow):
         self.logger.addHandler(loggTextBox)
         self.logger.info("logging setup completed")
 
+        # connect callbacks
+        self.pushButton_indata.clicked.connect(self._pushButton_indata_clicked)
+        self.pushButton_outpath.clicked.connect(self._pushButton_outpath_clicked)
+        self.pushButton_start.clicked.connect(self._pushButton_start_clicked)
 
-class QTextEditLogger(logging.Handler, QtCore.QObject):
+        # io
+        self.input_data = None
+        self.output_path = None
+
+        # read config
+        self.config = configparser.ConfigParser()
+        self.config.read(CONFIG_FILE)
+        self.config_use_user = self.config['default']['use_user'].lower() == 'true'
+        self.logger.info("config loaded")
+
+        # write gui values
+        self.write_config_to_gui()
+
+    def write_config_to_gui(self):
+        self.setWindowTitle(self.config['default']['window_title'])
+        if self.config_use_user:
+            config = self.config['user']
+            self.logger.info("benutze user-config")
+        else:
+            config = self.config['default']
+            self.logger.info("benutze default-config")
+        self.plainTextEdit_indata.setPlainText(config['indata'])
+        self.plainTextEdit_outpath.setPlainText(config['outpath'])
+
+    def _write_config(self):
+        if self.config_use_user:
+            with open(CONFIG_FILE, 'w') as configfile:
+                self.config.write(configfile)
+                self.logger.info("config mit neuen Werten gespeichert")
+
+    def _pushButton_indata_clicked(self):
+        data, _ = QtWidgets.QFileDialog.getOpenFileName(self, self.tr("Eingabe"), "C:\\", self.tr("Excel (*.xlsx *.xls)"))
+        print(data)
+        self.plainTextEdit_indata.setPlainText(data)
+        self.config['user']['indata'] = data
+
+    def _pushButton_outpath_clicked(self):
+        path = QtWidgets.QFileDialog.getExistingDirectory(None, self.tr("Ausgabe"), "C:\\", QtWidgets.QFileDialog.ShowDirsOnly)
+        self.plainTextEdit_outpath.setPlainText(path)
+        self.config['user']['outpath'] = path
+
+    def _pushButton_start_clicked(self):
+        # save config-dict
+        self._write_config()
+        # TODO start process
+
+
+class QTextEditLogger(logging.Handler, QObject):
     appendPlainText = QtCore.pyqtSignal(str)
 
     def __init__(self, widget):

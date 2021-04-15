@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>560</width>
+    <height>435</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>560</width>
+    <height>435</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>560</width>
+    <height>435</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPlainTextEdit" name="plainTextEdit_Logger">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>220</y>
+      <width>540</width>
+      <height>150</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QProgressBar" name="progressBar">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>380</y>
+      <width>540</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>0</number>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="textVisible">
+     <bool>true</bool>
+    </property>
+    <property name="invertedAppearance">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>130</y>
+      <width>310</width>
+      <height>77</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Anleitungstext bla</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_start">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>130</y>
+      <width>30</width>
+      <height>77</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="ressources.qrc">
+      <normaloff>:/icons/icons/start.png</normaloff>:/icons/icons/start.png</iconset>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>540</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Eingabe</string>
+    </property>
+    <widget class="QPlainTextEdit" name="plainTextEdit_indata">
+     <property name="geometry">
+      <rect>
+       <x>5</x>
+       <y>22</y>
+       <width>500</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="plainText">
+      <string>Eingabedatei</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_indata">
+     <property name="geometry">
+      <rect>
+       <x>510</x>
+       <y>22</y>
+       <width>25</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normalon>:/icons/icons/folder.png</normalon>
+      </iconset>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>70</y>
+      <width>540</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Ausgabe</string>
+    </property>
+    <widget class="QPlainTextEdit" name="plainTextEdit_outpath">
+     <property name="geometry">
+      <rect>
+       <x>5</x>
+       <y>22</y>
+       <width>500</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="plainText">
+      <string>Ausgabeordner</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_outpath">
+     <property name="geometry">
+      <rect>
+       <x>510</x>
+       <y>22</y>
+       <width>25</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normalon>:/icons/icons/folder.png</normalon>
+      </iconset>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>112</y>
+      <width>120</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <widget class="QCheckBox" name="checkBox_3">
+     <property name="geometry">
+      <rect>
+       <x>5</x>
+       <y>82</y>
+       <width>100</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Taufen</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_2">
+     <property name="geometry">
+      <rect>
+       <x>5</x>
+       <y>52</y>
+       <width>100</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Verstorben</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox">
+     <property name="geometry">
+      <rect>
+       <x>5</x>
+       <y>22</y>
+       <width>100</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Geburtstag</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>560</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <tabstops>
+  <tabstop>plainTextEdit_indata</tabstop>
+  <tabstop>pushButton_indata</tabstop>
+  <tabstop>plainTextEdit_outpath</tabstop>
+  <tabstop>pushButton_outpath</tabstop>
+  <tabstop>checkBox</tabstop>
+  <tabstop>checkBox_2</tabstop>
+  <tabstop>checkBox_3</tabstop>
+  <tabstop>pushButton_start</tabstop>
+  <tabstop>plainTextEdit_Logger</tabstop>
+ </tabstops>
+ <resources>
+  <include location="ressources.qrc"/>
+ </resources>
+ <connections/>
+</ui>
