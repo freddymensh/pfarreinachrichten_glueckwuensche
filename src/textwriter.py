@@ -4,21 +4,21 @@ import os
 from src.person import Person
 
 class Textwriter:
-    def __init__(self, indata, outpath, mode, logger_name='my_logger'):
+    def __init__(self, indata, outpath, mode, config, logger_name='my_logger'):
         self.indata = indata
         self.outpath = outpath
         self.mode = mode
         self.dataframe = self.read_xlsx()
-
+        self.config = config # read-only
         self.logger = logging.getLogger(logger_name)
 
     def write_txt(self):
         if self.mode['birth']:
-            self._write_txt_birth(data=self.dataframe['Geburtstage']) #TODO: Blattname in config
+            self._write_txt_birth(data=self.dataframe[self.config['default']['sheet_birth']])
         if self.mode['baptize']:
-            self._write_txt_baptize(data=self.dataframe['Taufen']) #TODO:Blattname in config
+            self._write_txt_baptize(data=self.dataframe[self.config['default']['sheet_baptize']])
         if self.mode['dead']:
-            self._write_txt_dead(data=self.dataframe['Verstorbene'])
+            self._write_txt_dead(data=self.dataframe[self.config['default']['sheet_dead']])
 
     def read_xlsx(self):
         data = pd.read_excel(io=self.indata, sheet_name=None)
@@ -36,7 +36,7 @@ class Textwriter:
         #random.shuffle(personen)
         personen.sort()
 
-        outdata = os.path.join(self.outpath, "geb.txt") #TODO Dateiname aus config
+        outdata = os.path.join(self.outpath, self.config['default']['out_birth'])
         with open(file=outdata, mode="a", encoding="UTF-8") as file_out:
             age = 0
             for i in personen:
@@ -52,7 +52,7 @@ class Textwriter:
             if type(personen[-1].name) == float:
                 personen.pop()
 
-        outdata = os.path.join(self.outpath, "taufen.txt") #TODO Dateiname aus config
+        outdata = os.path.join(self.outpath, self.config['default']['out_baptize'])
         with open(file=outdata, mode="a", encoding="UTF-8") as file_out:
             for i in personen:
                 file_out.write(str(i) + "\n")
@@ -64,7 +64,7 @@ class Textwriter:
             if personen[-1].name == None:
                 personen.pop()
 
-        outdata = os.path.join(self.outpath, "verstorben.txt") #TODO Dateiname aus config
+        outdata = os.path.join(self.outpath, self.config['default']['out_dead'])
         with open(file=outdata, mode="a", encoding="UTF-8") as file_out:
             for i in personen:
                 file_out.write(str(i) + "\n")

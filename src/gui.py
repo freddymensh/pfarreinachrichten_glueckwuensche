@@ -99,7 +99,7 @@ class GUI(QtWidgets.QMainWindow):
         mode = {'birth': self.checkBox_birth.isChecked(), 'baptize': self.checkBox_baptize.isChecked(), 'dead': self.checkBox_dead.isChecked()}
         indata = self.plainTextEdit_indata.toPlainText()
         outpath = self.plainTextEdit_outpath.toPlainText()
-        textwriter = Textwriter(indata=indata, outpath=outpath, mode=mode)
+        textwriter = Textwriter(indata=indata, outpath=outpath, mode=mode, config=self.config)
         textwriter.write_txt()
 
 
