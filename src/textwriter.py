@@ -5,12 +5,12 @@ from src.person import Person
 
 class Textwriter:
     def __init__(self, indata, outpath, mode, config, logger_name='my_logger'):
+        self.logger = logging.getLogger(logger_name)
         self.indata = indata
         self.outpath = outpath
         self.mode = mode
         self.dataframe = self.read_xlsx()
         self.config = config # read-only
-        self.logger = logging.getLogger(logger_name)
 
     def write_txt(self):
         if self.mode['birth']:
@@ -22,7 +22,7 @@ class Textwriter:
 
     def read_xlsx(self):
         data = pd.read_excel(io=self.indata, sheet_name=None)
-        #self.logger.info("Tabellenblaetter {} gefunden".format(data)) #TODO: logger fixen
+        self.logger.info("Tabellenblaetter {} gefunden".format([i for i in data.keys()]))
         return data
 
     def _write_txt_birth(self, data):
@@ -32,8 +32,6 @@ class Textwriter:
             if type(personen[-1].name) == float:
                 personen.pop()
 
-        #import random
-        #random.shuffle(personen)
         personen.sort()
 
         outdata = os.path.join(self.outpath, self.config['default']['out_birth'])

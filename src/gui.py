@@ -38,10 +38,6 @@ class GUI(QtWidgets.QMainWindow):
         self.pushButton_start.clicked.connect(self._pushButton_start_clicked)
         self.checkBox_savesettings.stateChanged.connect(self._checkBox_savesettings_stateChanged)
 
-        # io DEPRECATED
-        #self.input_data = None
-        #self.output_path = None
-
         # read config
         self.config = configparser.ConfigParser()
         self.config.read(CONFIG_FILE)
@@ -50,6 +46,7 @@ class GUI(QtWidgets.QMainWindow):
 
         # write gui values
         self.write_config_to_gui()
+        # TODO Ladebalken
 
     def write_config_to_gui(self):
         self.setWindowTitle(self.config['default']['window_title'])
