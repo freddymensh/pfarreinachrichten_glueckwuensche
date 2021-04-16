@@ -35,6 +35,7 @@ class GUI(QtWidgets.QMainWindow):
         self.pushButton_indata.clicked.connect(self._pushButton_indata_clicked)
         self.pushButton_outpath.clicked.connect(self._pushButton_outpath_clicked)
         self.pushButton_start.clicked.connect(self._pushButton_start_clicked)
+        self.checkBox_savesettings.stateChanged.connect(self._checkBox_savesettings_stateChanged)
 
         # io
         self.input_data = None
@@ -59,28 +60,38 @@ class GUI(QtWidgets.QMainWindow):
             self.logger.info("benutze default-config")
         self.plainTextEdit_indata.setPlainText(config['indata'])
         self.plainTextEdit_outpath.setPlainText(config['outpath'])
+        self.checkBox_savesettings.setChecked(self.config['default']['use_user'].lower() == 'true')
 
     def _write_config(self):
         if self.config_use_user:
-            with open(CONFIG_FILE, 'w') as configfile:
-                self.config.write(configfile)
-                self.logger.info("config mit neuen Werten gespeichert")
+            self.config['user']['indata'] = self.plainTextEdit_indata.toPlainText()
+            self.config['user']['outpath'] = self.plainTextEdit_outpath.toPlainText()
+        with open(CONFIG_FILE, 'w') as configfile:
+            self.config.write(configfile)
+            self.logger.info("config mit neuen Werten gespeichert")
 
     def _pushButton_indata_clicked(self):
         data, _ = QtWidgets.QFileDialog.getOpenFileName(self, self.tr("Eingabe"), "C:\\", self.tr("Excel (*.xlsx *.xls)"))
         print(data)
         self.plainTextEdit_indata.setPlainText(data)
-        self.config['user']['indata'] = data
+        if self.config_use_user:
+            self.config['user']['indata'] = data
 
     def _pushButton_outpath_clicked(self):
         path = QtWidgets.QFileDialog.getExistingDirectory(None, self.tr("Ausgabe"), "C:\\", QtWidgets.QFileDialog.ShowDirsOnly)
         self.plainTextEdit_outpath.setPlainText(path)
-        self.config['user']['outpath'] = path
+        if self.config_use_user:
+            self.config['user']['outpath'] = path
 
     def _pushButton_start_clicked(self):
         # save config-dict
         self._write_config()
         # TODO start process
+        # TODO read paths from gui
+
+    def _checkBox_savesettings_stateChanged(self):
+        self.config['default']['use_user'] = str(self.checkBox_savesettings.isChecked())
+        self.config_use_user = self.checkBox_savesettings.isChecked()
 
 
 class QTextEditLogger(logging.Handler, QObject):
