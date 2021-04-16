@@ -59,6 +59,7 @@ class GUI(QtWidgets.QMainWindow):
         self.plainTextEdit_indata.setPlainText(config['indata'])
         self.plainTextEdit_outpath.setPlainText(config['outpath'])
         self.checkBox_savesettings.setChecked(self.config['default']['use_user'].lower() == 'true')
+        self.label_manual.setText(self.config['default']['manual_text'])
 
     def _write_config(self):
         if self.config_use_user:
