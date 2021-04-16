@@ -96,8 +96,13 @@ class GUI(QtWidgets.QMainWindow):
         mode = {'birth': self.checkBox_birth.isChecked(), 'baptize': self.checkBox_baptize.isChecked(), 'dead': self.checkBox_dead.isChecked()}
         indata = self.plainTextEdit_indata.toPlainText()
         outpath = self.plainTextEdit_outpath.toPlainText()
-        textwriter = Textwriter(indata=indata, outpath=outpath, mode=mode, config=self.config)
+        textwriter = Textwriter(indata=indata, outpath=outpath, mode=mode, progressbar_callback=self.progressBar_set_value, config=self.config)
         textwriter.write_txt()
+        self.progressBar_set_value(100)
+        self.logger.info("Die Dateien sind unter {} zu finden".format(self.plainTextEdit_outpath.toPlainText()))
+
+    def progressBar_set_value(self, progress):
+        self.progressBar.setValue(progress)
 
 
 class QTextEditLogger(logging.Handler, QObject):
