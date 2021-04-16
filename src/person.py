@@ -1,7 +1,9 @@
-TYPES = ("geburtstag", "taufen", "verstorben") # TODO in config
+import pandas as pd
+
+TYPES = ("geburtstag", "taufen", "verstorben")
 
 
-class Person():
+class Person:
     anrede = None
     acad_degree = None
     first_name = None
@@ -47,10 +49,10 @@ class Person():
         elif self.datum > other.datum:
             return False
 
-#        if str_to_DIN5007v1(self.name) < str_to_DIN5007v1(other.name):
-#            return True
-#        else:
-#            return False
+        if str_to_DIN5007v1(self.name) < str_to_DIN5007v1(other.name):
+            return True
+        else:
+            return False
 
     def __gt__(self, other):
         return not self < other
@@ -73,20 +75,20 @@ class Person():
         if self.name_affix != "":
             name_affix = self.name_affix + " "
 
-        return self.datum[0:6] + " " + akad + self.first_name + " " + name_affix + self.name #TODO: Timestamp to string
+        return self.datum.strftime("%d.%m.") + " " + akad + self.first_name + " " + name_affix + self.name
 
     def taufen_str(self):
-        return self.first_name + " " + self.name + " am " + self.datum + " in " + self.ort
+        return self.first_name + " " + self.name + " am " + self.datum.strftime("%d.%m.%Y") + " in " + self.ort
 
     def verstorben_str(self):
         akad = ""
-        if self.acad_degree != "":
+        if not pd.isnull(self.acad_degree):
             akad = self.acad_degree + " "
-        return akad + self.first_name + " " + self.name + " (" + str(self.alter) + ") am " + self.datum
+        return akad + self.first_name + " " + self.name + " (" + str(self.alter) + ") am " + self.datum.strftime("%d.%m.%Y")
 
     def geburtstag_init(self, df):
         df = df.fillna("")
-        self.datum = df.iloc[0][['Geburtsdatum']].values[0]
+        self.datum = df.iloc[0][['Geburtsdatum']].values[0].to_pydatetime()
         self.alter = df.iloc[0][['Alter']].values[0]
         self.anrede = df.iloc[0][['Anrede']].values[0]
         self.name = df.iloc[0][['Name']].values[0]
@@ -94,23 +96,22 @@ class Person():
         self.name_affix = df.iloc[0][['Namensbest.']].values[0]
         self.acad_degree = df.iloc[0][['Akad.Grad']].values[0]
 
-    def taufen_init(self, coll):
-        self.datum = coll[0]
-        self.ort = coll[1]
-        self.name = coll[2]
-        self.first_name = coll[3]
+    def taufen_init(self, df):
+        self.datum = df.iloc[0][['Taufdatum']].values[0].to_pydatetime()
+        self.ort = df.iloc[0][['Taufkirche']].values[0]
+        self.name = df.iloc[0][['Name']].values[0]
+        self.first_name = df.iloc[0][['Rufname']].values[0]
 
-    def verstorben_init(self, coll):
-        self.datum = coll[0]
-        self.anrede = coll[1]
-        if coll[5] != "":
-            self.name = coll[4] + " " + coll[2]
+    def verstorben_init(self, df):
+        self.datum = df.iloc[0][['Sterbedatum']].values[0].to_pydatetime()
+        self.anrede = df.iloc[0][['Anrede']].values[0]
+        if pd.isnull(df.iloc[0][['Namensbest.']].values[0]):
+            self.name = df.iloc[0][['Name']].values[0]
         else:
-            self.name = coll[2]
-        self.first_name = coll[3]
-        self.first_name = coll[3]
-        self.acad_degree = coll[5]
-        self.alter = int(coll[6])
+            self.name = df.iloc[0][['Namensbest.']].values[0] + " " + df.iloc[0][['Name']].values[0]
+        self.first_name = df.iloc[0][['Rufname']].values[0]
+        self.acad_degree = df.iloc[0][['Akad.Grad']].values[0]
+        self.alter = df.iloc[0][['Alter']].values[0]
 
 
 def str_to_date(s):
