@@ -204,7 +204,7 @@
     <property name="title">
      <string/>
     </property>
-    <widget class="QCheckBox" name="checkBox_3">
+    <widget class="QCheckBox" name="checkBox_baptize">
      <property name="geometry">
       <rect>
        <x>5</x>
@@ -220,7 +220,7 @@
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_2">
+    <widget class="QCheckBox" name="checkBox_dead">
      <property name="geometry">
       <rect>
        <x>5</x>
@@ -236,7 +236,7 @@
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox">
+    <widget class="QCheckBox" name="checkBox_birth">
      <property name="geometry">
       <rect>
        <x>5</x>
@@ -284,9 +284,9 @@
   <tabstop>pushButton_indata</tabstop>
   <tabstop>plainTextEdit_outpath</tabstop>
   <tabstop>pushButton_outpath</tabstop>
-  <tabstop>checkBox</tabstop>
-  <tabstop>checkBox_2</tabstop>
-  <tabstop>checkBox_3</tabstop>
+  <tabstop>checkBox_birth</tabstop>
+  <tabstop>checkBox_dead</tabstop>
+  <tabstop>checkBox_baptize</tabstop>
   <tabstop>pushButton_start</tabstop>
   <tabstop>plainTextEdit_Logger</tabstop>
  </tabstops>

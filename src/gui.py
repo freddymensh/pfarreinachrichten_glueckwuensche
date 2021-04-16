@@ -6,6 +6,7 @@ from PyQt5 import QtWidgets, uic, QtCore
 from PyQt5.QtCore import QFile, QObject
 
 import ressources.ressources
+from src.textwriter import Textwriter
 
 CONFIG_FILE = "./config.ini"
 
@@ -37,9 +38,9 @@ class GUI(QtWidgets.QMainWindow):
         self.pushButton_start.clicked.connect(self._pushButton_start_clicked)
         self.checkBox_savesettings.stateChanged.connect(self._checkBox_savesettings_stateChanged)
 
-        # io
-        self.input_data = None
-        self.output_path = None
+        # io DEPRECATED
+        #self.input_data = None
+        #self.output_path = None
 
         # read config
         self.config = configparser.ConfigParser()
@@ -71,7 +72,7 @@ class GUI(QtWidgets.QMainWindow):
             self.logger.info("config mit neuen Werten gespeichert")
 
     def _pushButton_indata_clicked(self):
-        data, _ = QtWidgets.QFileDialog.getOpenFileName(self, self.tr("Eingabe"), "C:\\", self.tr("Excel (*.xlsx *.xls)"))
+        data, _ = QtWidgets.QFileDialog.getOpenFileName(self, self.tr("Eingabe"), "C:\\", self.tr("Excel (*.xls *.xlsx *.xlsm *.xlsb *.odf *.ods *.odt)"))
         print(data)
         self.plainTextEdit_indata.setPlainText(data)
         if self.config_use_user:
@@ -86,12 +87,20 @@ class GUI(QtWidgets.QMainWindow):
     def _pushButton_start_clicked(self):
         # save config-dict
         self._write_config()
-        # TODO start process
-        # TODO read paths from gui
+        # start process
+        self._main_process()
 
     def _checkBox_savesettings_stateChanged(self):
         self.config['default']['use_user'] = str(self.checkBox_savesettings.isChecked())
         self.config_use_user = self.checkBox_savesettings.isChecked()
+
+    @threaded
+    def _main_process(self):
+        mode = {'birth': self.checkBox_birth.isChecked(), 'baptize': self.checkBox_baptize.isChecked(), 'dead': self.checkBox_dead.isChecked()}
+        indata = self.plainTextEdit_indata.toPlainText()
+        outpath = self.plainTextEdit_outpath.toPlainText()
+        textwriter = Textwriter(indata=indata, outpath=outpath, mode=mode)
+        textwriter.write_txt()
 
 
 class QTextEditLogger(logging.Handler, QObject):

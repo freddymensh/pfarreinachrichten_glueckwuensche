@@ -1,7 +1,7 @@
-TYPES = ("geburtstag", "taufen", "verstorben")
+TYPES = ("geburtstag", "taufen", "verstorben") # TODO in config
 
 
-class Myperson():
+class Person():
     anrede = None
     acad_degree = None
     first_name = None
@@ -10,35 +10,27 @@ class Myperson():
     alter = None
     datum = None
     ort = None
-    type = None
+    mode = None
 
-    def __init__(self, s, t):
-        assert t in TYPES
+    def __init__(self, df, mode):
+        assert mode in TYPES
+        self.mode = mode
 
-        coll = s.split(",")
-        coll = s.split(";")
-
-        # abfang leerer Zeilen
-        if coll[0] =="":
-            return
-
-        self.type = t
-
-        if self.type == TYPES[0]:       # geburtstag
-            self.geburtstag_init(coll)
-        elif self.type == TYPES[1]:     # taufen
-            self.taufen_init(coll)
-        elif self.type == TYPES[2]:     # verstorben
-            self.verstorben_init(coll)
+        if self.mode == TYPES[0]:       # geburtstag
+            self.geburtstag_init(df)
+        elif self.mode == TYPES[1]:     # taufen
+            self.taufen_init(df)
+        elif self.mode == TYPES[2]:     # verstorben
+            self.verstorben_init(df)
         else:
             print("argument \'t\' must be in %s", str(TYPES))
 
     def __str__(self):
-        if self.type == TYPES[0]:  # geburtstag
+        if self.mode == TYPES[0]:  # geburtstag
             return self.geburtstag_str()
-        elif self.type == TYPES[1]:  # taufen
+        elif self.mode == TYPES[1]:  # taufen
             return self.taufen_str()
-        elif self.type == TYPES[2]:  # verstorben
+        elif self.mode == TYPES[2]:  # verstorben
             return self.verstorben_str()
         else:
             print("attribute \'type\' must be in %s", str(TYPES))
@@ -50,15 +42,15 @@ class Myperson():
         elif self.alter > other.alter:
             return False
 
-        if str_to_date(self.datum) < str_to_date(other.datum):
+        if self.datum < other.datum:
             return True
-        elif str_to_date(self.datum) > str_to_date(other.datum):
+        elif self.datum > other.datum:
             return False
 
-        if str_to_DIN5007v1(self.name) < str_to_DIN5007v1(other.name):
-            return True
-        else:
-            return False
+#        if str_to_DIN5007v1(self.name) < str_to_DIN5007v1(other.name):
+#            return True
+#        else:
+#            return False
 
     def __gt__(self, other):
         return not self < other
@@ -81,7 +73,7 @@ class Myperson():
         if self.name_affix != "":
             name_affix = self.name_affix + " "
 
-        return self.datum[0:6] + " " + akad + self.first_name + " " + name_affix + self.name
+        return self.datum[0:6] + " " + akad + self.first_name + " " + name_affix + self.name #TODO: Timestamp to string
 
     def taufen_str(self):
         return self.first_name + " " + self.name + " am " + self.datum + " in " + self.ort
@@ -92,17 +84,15 @@ class Myperson():
             akad = self.acad_degree + " "
         return akad + self.first_name + " " + self.name + " (" + str(self.alter) + ") am " + self.datum
 
-    def geburtstag_init(self, coll):
-        self.datum = coll[0]
-        self.alter = int(coll[1])
-        self.anrede = coll[2]
-        self.name = coll[3]
-        self.first_name = coll[4]
-        self.name_affix = coll[5]
-        if coll[6] != "\n":
-            self.acad_degree = coll[6][:-1]
-        else:
-            self.acad_degree = ""
+    def geburtstag_init(self, df):
+        df = df.fillna("")
+        self.datum = df.iloc[0][['Geburtsdatum']].values[0]
+        self.alter = df.iloc[0][['Alter']].values[0]
+        self.anrede = df.iloc[0][['Anrede']].values[0]
+        self.name = df.iloc[0][['Name']].values[0]
+        self.first_name = df.iloc[0][['Rufname']].values[0]
+        self.name_affix = df.iloc[0][['Namensbest.']].values[0]
+        self.acad_degree = df.iloc[0][['Akad.Grad']].values[0]
 
     def taufen_init(self, coll):
         self.datum = coll[0]
